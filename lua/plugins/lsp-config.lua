@@ -1,5 +1,5 @@
 return {
-  {
+	{
 		"mason-org/mason.nvim",
 		config = function()
 			require("mason").setup()
@@ -14,7 +14,8 @@ return {
 		},
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "pyright", "vhdl_ls", "svls" },
+				-- ensure_installed = { "lua_ls", "pyright", "vhdl_ls", "svls" },
+				ensure_installed = { "lua_ls", "pylsp", "vhdl_ls", "svls" },
 			})
 		end,
 	},
@@ -45,9 +46,28 @@ return {
 				},
 			})
 
-			vim.lsp.config("pyright", {
+			vim.lsp.config("pylsp", {
 				capabilities = capabilities,
+				settings = {
+					pylsp = {
+						plugins = {
+							pyflakes = { enabled = false },
+							pycodestyle = { enabled = false },
+							autopep8 = { enabled = false },
+							yapf = { enabled = false },
+							mccabe = { enabled = false },
+							-- pylint = { enabled = true },
+							pylsp_mypy = { enabled = false },
+							pylsp_black = { enabled = false },
+							pylsp_isort = { enabled = false },
+						},
+					},
+				},
 			})
+
+			--vim.lsp.config("pyright", {
+			--	capabilities = capabilities,
+			--})
 			-- vim.lsp.config("vhdl_ls", {})
 
 			-- vim.lsp.config("svls", {
@@ -66,8 +86,9 @@ return {
 			vim.lsp.enable("svls")
 
 			vim.lsp.enable("lua_ls")
-			vim.lsp.enable("pyright")
-			vim.lsp.enable("vhdl_ls")
+			vim.lsp.enable("pylsp")
+			-- vim.lsp.enable("pyright")
+			-- vim.lsp.enable("vhdl_ls")
 
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
