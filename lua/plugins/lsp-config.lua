@@ -28,6 +28,24 @@ return {
 
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+			local function on_attach(client, bufnr)
+				local opts = { noremap = true, silent = true, buffer = bufnr }
+
+				-- Example keymaps
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+
+				-- Example format on save
+				if client.supports_method("textDocument/formatting") then
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						buffer = bufnr,
+						callback = function()
+							vim.lsp.buf.format({ bufnr = bufnr })
+						end,
+					})
+				end
+			end
+
 			-- vim.lsp.config("lua_ls", {
 			-- 	capabilities = capabilities,
 			-- 	settings = {
@@ -68,27 +86,32 @@ return {
 			--vim.lsp.config("pyright", {
 			--	capabilities = capabilities,
 			--})
-			-- vim.lsp.config("vhdl_ls", {})
+			vim.lsp.config("vhdl_ls", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+			})
 
-			-- vim.lsp.config("svls", {
-			-- 	cmd = { "svls" },
-			-- 	filetypes = { "verilog", "systemverilog" },
+			vim.lsp.config("svls", {
+				cmd = { "svls" },
+				filetypes = { "verilog", "systemverilog" },
 
-			-- 	root_markers = { "svls.toml", ".svls.toml", ".git" },
+				root_markers = { "svls.toml", ".svls.toml", ".git" },
+				-- root_dir = function(fname)
+				-- 	return require("lspconfig.util").find_git_ancestor(fname)
+				-- end,
 
-			-- 	settings = {
-			-- 		systemverilog = {
-			-- 			includeIndexing = true,
-			-- 		},
-			-- 	},
-			-- })
+				settings = {
+					systemverilog = {
+						includeIndexing = true,
+					},
+				},
+			})
 
 			vim.lsp.enable("svls")
 
 			vim.lsp.enable("lua_ls")
 			vim.lsp.enable("pylsp")
-			-- vim.lsp.enable("pyright")
-			-- vim.lsp.enable("vhdl_ls")
+			vim.lsp.enable("vhdl_ls")
 
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
