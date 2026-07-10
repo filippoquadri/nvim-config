@@ -15,15 +15,26 @@ return {
 		config = function()
 			require("mason-lspconfig").setup({
 				-- ensure_installed = { "lua_ls", "pyright", "vhdl_ls", "svls" },
-				ensure_installed = { "lua_ls", "pylsp", "vhdl_ls", "svls" },
+				-- ensure_installed = { "lua_ls", "pylsp", "vhdl_ls", "svls" },
+				-- ensure_installed = { "lua_ls", "pylsp", "vhdl_ls", "svlangserver", "svls", "verible" },
+				ensure_installed = { "lua_ls", "pylsp", "vhdl_ls", "verible", "svlangserver", "slang_server" },
 			})
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
+			-- vim.diagnostic.config({
+			-- 	virtual_text = true,
+			-- })
+
 			vim.diagnostic.config({
-				virtual_text = true,
+				virtual_text = {
+					source = "always", -- <-- This forces the server name to display inline on your screen
+				},
+				float = {
+					source = "always", -- Forces the server name to show inside hover pop-up windows
+				},
 			})
 
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -46,17 +57,8 @@ return {
 				end
 			end
 
-			-- vim.lsp.config("lua_ls", {
-			-- 	capabilities = capabilities,
-			-- 	settings = {
-			-- 		Lua = {
-			-- 			diagnostics = { globals = { "vim" } },
-			-- 		},
-			-- 	},
-			-- })
-
 			vim.lsp.config("lua_ls", {
-				capabilities = capabilities, -- Placed at ROOT level, not inside settings
+				capabilities = capabilities,
 				settings = {
 					Lua = {
 						diagnostics = { globals = { "vim" } },
@@ -83,31 +85,61 @@ return {
 				},
 			})
 
-			--vim.lsp.config("pyright", {
-			--	capabilities = capabilities,
-			--})
 			vim.lsp.config("vhdl_ls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 			})
 
-			vim.lsp.config("svls", {
-				cmd = { "svls" },
+			-- vim.lsp.config("svls", {
+			-- 	on_attach = on_attach,
+			-- 	capabilities = capabilities,
+			-- 	cmd = { "svls" },
+			-- 	filetypes = { "verilog", "systemverilog" },
+			--
+			-- 	root_markers = { "svls.toml", ".svls.toml", ".git" },
+			--
+			-- 	settings = {
+			-- 		systemverilog = {
+			-- 			includeIndexing = true,
+			-- 		},
+			-- 	},
+			-- })
+
+			-- vim.lsp.enable("svls")
+
+			vim.lsp.config("svlangserver", {
+				on_attach = on_attach,
+				capabilities = capabilities,
 				filetypes = { "verilog", "systemverilog" },
-
-				root_markers = { "svls.toml", ".svls.toml", ".git" },
-				-- root_dir = function(fname)
-				-- 	return require("lspconfig.util").find_git_ancestor(fname)
-				-- end,
-
+				root_markers = { ".git", "svlangserver.json" },
 				settings = {
 					systemverilog = {
-						includeIndexing = true,
+						-- Tells the server to aggressively index all files in the repo for completion
+						includeIndexing = { "*.v", "*.sv", "*.svh" },
+						excludeIndexing = { "*node_modules*", "*sim_build*" },
 					},
 				},
 			})
 
-			vim.lsp.enable("svls")
+			vim.lsp.enable("svlangserver")
+
+			vim.lsp.config("slang_server", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				cmd = { "slang-server" },
+				filetypes = { "systemverilog", "verilog" },
+				root_markers = { ".git", "slang.config" },
+			})
+			vim.lsp.enable("slang_server")
+
+			vim.lsp.config("verible", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "verilog", "systemverilog" },
+				root_markers = { ".git", "verible.toml" },
+				cmd = { "verible-verilog-ls", "--lsp_enable_hover" },
+			})
+			vim.lsp.enable("verible")
 
 			vim.lsp.enable("lua_ls")
 			vim.lsp.enable("pylsp")
