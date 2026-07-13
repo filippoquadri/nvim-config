@@ -8,16 +8,18 @@ return {
 	},
 	lazy = false, -- neo-tree will lazily load itself
 	config = function()
-		-- require("neo-tree").setup({
-		-- 	filesystem = {
-		-- 		filtered_items = {
-		-- 			visible = true, -- Show filtered items instead of hiding them
-		-- 			hide_dotfiles = false, -- Show dotfiles
-		-- 			hide_gitignored = false, -- Optional: show gitignored files
-		-- 			hide_hidden = false, -- Show hidden files (Windows)
-		-- 		},
-		-- 	},
-		-- })
+		require("neo-tree").setup({
+			filesystem = {
+				filtered_items = {
+					-- visible = true, -- Show filtered items instead of hiding them
+					-- hide_dotfiles = false, -- Show dotfiles
+					-- hide_gitignored = false, -- Optional: show gitignored files
+					hide_by_name = {
+						"__pycache__",
+					},
+				},
+			},
+		})
 		vim.keymap.set("n", "<C-b>", ":Neotree filesystem reveal left<CR>", { desc = "Open Neotree filesystem" })
 	end,
 }
