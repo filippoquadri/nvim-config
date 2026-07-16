@@ -10,3 +10,9 @@ vim.opt.relativenumber = true
 vim.opt.cursorline = true
 
 vim.g.mapleader = " "
+
+vim.filetype.add({
+	extension = {
+		core = "yaml",
+	},
+})
