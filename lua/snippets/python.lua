@@ -20,7 +20,7 @@ return {
 		t({ "", "    await RisingEdge(dut.clk_i)" }),
 		t({ "", "    dut.rst_n_i.value = 0" }),
 		t({ "", "" }),
-		t({ "", "    # Reset all the signal of the dut" }),
+		t({ "", "    # Reset all the signals of the dut" }),
 		t({ "", "" }),
 		t({ "", "    await ClockCycles(dut.clk_i, 5)" }),
 		t({ "", "    dut.rst_n_i.value = 1" }),
