@@ -40,7 +40,7 @@ return {
 		i(1, "Test the DUT"),
 		t({ '"""', "" }),
 		t({ "", "    # Start clock" }),
-		t({ "", '    clock = Clock(dut.clk_i, 10, units="ns")' }),
+		t({ "", '    clock = Clock(dut.clk_i, 10, unit="ns")' }),
 		t({ "", "    cocotb.start_soon(clock.start())" }),
 		t({ "", "" }),
 		t({ "", "" }),
