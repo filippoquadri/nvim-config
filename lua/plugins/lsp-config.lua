@@ -115,8 +115,8 @@ return {
 				settings = {
 					systemverilog = {
 						-- Tells the server to aggressively index all files in the repo for completion
-						includeIndexing = { "*.v", "*.sv", "*.svh" },
-						excludeIndexing = { "*node_modules*", "*sim_build*" },
+						includeIndexing = { "**/*.v", "**/*.sv", "**/*.svh" },
+						excludeIndexing = { "**/node_modules/**", "**/sim_build/**" },
 					},
 				},
 			})
@@ -136,8 +136,11 @@ return {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = { "verilog", "systemverilog" },
-				root_markers = { ".git", "verible.toml" },
-				cmd = { "verible-verilog-ls", "--lsp_enable_hover" },
+				root_markers = { ".git", ".verible-verilog-format" },
+				cmd = {
+					"verible-verilog-ls",
+					"--lsp_enable_hover",
+				},
 			})
 			vim.lsp.enable("verible")
 

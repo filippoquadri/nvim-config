@@ -8,9 +8,13 @@ local f = ls.function_node
 return {
 	s("cocotb_tb", {
 		t({
+			"import logging",
+			"",
 			"import cocotb",
 			"from cocotb.clock import Clock",
 			"from cocotb.triggers import ClockCycles, FallingEdge, RisingEdge",
+			"",
+			"logging.getLogger('cocotb').setLevel(logging.DEBUG)",
 			"",
 			"",
 		}),

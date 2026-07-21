@@ -52,6 +52,7 @@ return {
 				"shfmt",
 				"stylua", -- lua formatter; Already installed via Mason
 				"ruff", -- Python linter and formatter; Already installed via Mason
+				"verible",
 			},
 			-- auto-install configured formatters & linters (with null-ls)
 			automatic_installation = true,
@@ -64,6 +65,10 @@ return {
 			formatting.terraform_fmt,
 			require("none-ls.formatting.ruff").with({ extra_args = { "--extend-select", "I" } }),
 			require("none-ls.formatting.ruff_format"),
+
+			formatting.verible_verilog_format.with({
+				extra_args = { "--flagfile=.verible-verilog-format" },
+			}),
 		}
 
 		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
